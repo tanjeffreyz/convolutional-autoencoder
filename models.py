@@ -1,6 +1,11 @@
-import math
 import torch
 import torch.nn as nn
+
+
+class ShapeProbe(nn.Module):
+    def forward(self, x):
+        print(x.shape)
+        return x
 
 
 class SimpleAutoencoder:
@@ -32,12 +37,12 @@ class ConvolutionalAutoencoder:
             nn.MaxPool2d(kernel_size=2),
 
             # Latent Space
-            nn.ConvTranspose2d(8, 8, kernel_size=5, stride=2, padding=2),
+            nn.ConvTranspose2d(8, 8, kernel_size=5, stride=1, padding=2),
 
             # Decoding
-            nn.ConvTranspose2d(8, 4, kernel_size=3, stride=2, padding=1),
-            nn.ConvTranspose2d(4, 2, kernel_size=2, stride=2, padding=1),
-            nn.ConvTranspose2d(2, 1, kernel_size=3, stride=1, padding=1),
+            nn.ConvTranspose2d(8, 4, kernel_size=4, stride=2, padding=1),
+            nn.ConvTranspose2d(4, 2, kernel_size=2, stride=2, padding=0),
+            nn.ConvTranspose2d(2, 1, kernel_size=4, stride=2, padding=1)
         )
 
     def __call__(self, x):

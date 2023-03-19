@@ -25,7 +25,8 @@ train_set = LFWPeople(
     download=True,
     transform=T.Compose([
         T.ToTensor(),
-        T.Grayscale()
+        T.Resize((64, 64)),
+        T.Grayscale(),
     ])
 )
 test_set = LFWPeople(root='data', split='test', download=True)
@@ -38,9 +39,10 @@ x = next(iter(train_loader))[0]
 model_class = (ConvolutionalAutoencoder if args.conv else SimpleAutoencoder)
 model = model_class(x.shape[-1])
 
-
+#
 print(x.shape)
-print(model(x).shape)
+model(x)
+# print(model(x).shape)
 
 
 # Create folders for this run
