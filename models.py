@@ -1,3 +1,5 @@
+import math
+import torch
 import torch.nn as nn
 
 
@@ -5,15 +7,17 @@ class SimpleAutoencoder:
     def __init__(self, in_size):
         assert in_size % 2 == 0, 'Dimensions must be divisible by 2'
 
+        self.in_size = in_size
         size = in_size * in_size
         self.model = nn.Sequential(
-            nn.Flatten(size),
+            nn.Flatten(),
             nn.Linear(size, size // 2),
             nn.Linear(size // 2, size)
         )
 
     def __call__(self, x):
-        return self.model.forward(x)
+        result = self.model.forward(x)
+        return torch.reshape(result, (result.shape[0], 1, self.in_size, self.in_size))
 
 
 class ConvolutionalAutoencoder:
