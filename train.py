@@ -76,7 +76,7 @@ def save_metrics():
 
 
 # Train
-for epoch in tqdm(range(25), desc='Epoch'):
+for epoch in tqdm(range(50), desc='Epoch'):
     model.train()
     train_loss = 0
     for data, _ in tqdm(train_loader, desc='Train', leave=False):
@@ -91,10 +91,10 @@ for epoch in tqdm(range(25), desc='Epoch'):
         train_loss += loss.item() / len(train_loader)
         del data
 
-    train_losses = np.append(train_losses, [[epoch], [train_loss]])
+    train_losses = np.append(train_losses, [[epoch], [train_loss]], axis=1)
     writer.add_scalar('Loss/train', train_loss, epoch)
 
-    if epoch % 4 == 0:
+    if epoch % 2 == 0:
         model.eval()
         with torch.no_grad():
             test_loss = 0
@@ -106,9 +106,9 @@ for epoch in tqdm(range(25), desc='Epoch'):
 
                 test_loss += loss.item() / len(test_loader)
                 del data
-            test_losses = np.append(test_losses, [[epoch], [test_loss]])
+            test_losses = np.append(test_losses, [[epoch], [test_loss]], axis=1)
             writer.add_scalar('Loss/test', test_loss, epoch)
             save_metrics()
-            torch.save(model.state_dict(), os.path.join(weight_dir, f'cp_{epoch}'))
+            # torch.save(model.state_dict(), os.path.join(weight_dir, f'cp_{epoch}'))
 save_metrics()
 torch.save(model.state_dict(), os.path.join(weight_dir, 'final'))
