@@ -48,7 +48,7 @@ model = model_class(x.shape[-1]).to(device)
 # Optimizer
 optimizer = torch.optim.Adam(
     model.parameters(),
-    lr=1E-4
+    lr=1E-3
 )
 
 # Loss Function
