@@ -32,20 +32,20 @@ class ConvolutionalAutoencoder(nn.Module):
         super().__init__()
         self.model = nn.Sequential(
             # Encoding
-            nn.Conv2d(1, 2, kernel_size=3, padding=1),
+            nn.Conv2d(1, 4, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.Conv2d(2, 4, kernel_size=3, padding=1),
+            nn.Conv2d(4, 16, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.Conv2d(4, 8, kernel_size=3, padding=1),
+            nn.Conv2d(16, 32, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
 
             # Latent Space
-            nn.ConvTranspose2d(8, 8, kernel_size=5, stride=1, padding=2),
+            nn.ConvTranspose2d(32, 32, kernel_size=5, stride=1, padding=2),
 
             # Decoding
-            nn.ConvTranspose2d(8, 4, kernel_size=4, stride=2, padding=1),
-            nn.ConvTranspose2d(4, 2, kernel_size=2, stride=2, padding=0),
-            nn.ConvTranspose2d(2, 1, kernel_size=4, stride=2, padding=1),
+            nn.ConvTranspose2d(32, 16, kernel_size=4, stride=2, padding=1),
+            nn.ConvTranspose2d(16, 4, kernel_size=2, stride=2, padding=0),
+            nn.ConvTranspose2d(4, 1, kernel_size=4, stride=2, padding=1),
             nn.Sigmoid()
         )
 
