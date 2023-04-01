@@ -43,27 +43,17 @@ class ConvolutionalAutoencoder(nn.Module):
             # Encoder
             nn.Conv2d(1, 8, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU(inplace=True),
-
             nn.Conv2d(8, 16, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU(inplace=True),
-
             nn.Conv2d(16, 32, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU(inplace=True),
 
             # Latent Space (32 x 8 x 8)
             nn.ConvTranspose2d(32, 32, kernel_size=5, stride=2, padding=1),
-            nn.ReLU(inplace=True),
 
             # Decoder
             nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1),
-            nn.ReLU(inplace=True),
-
             nn.ConvTranspose2d(16, 8, kernel_size=2, stride=2, padding=1),
-            nn.ReLU(inplace=True),
-
             nn.ConvTranspose2d(8, 1, kernel_size=3, stride=1, padding=1),
             nn.Sigmoid()
         )

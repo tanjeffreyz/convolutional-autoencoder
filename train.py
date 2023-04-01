@@ -1,8 +1,8 @@
 import torch
 import os
 import argparse
+import config
 import numpy as np
-import torchvision.transforms as T
 from models import SimpleAutoencoder, ConvolutionalAutoencoder
 from torchvision.datasets.lfw import LFWPeople
 from torch.utils.data import DataLoader
@@ -19,22 +19,17 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 writer = SummaryWriter()
 now = datetime.now()
 
-transform = T.Compose([
-    T.ToTensor(),
-    T.Resize((64, 64)),
-    T.Grayscale(),
-])
 train_set = LFWPeople(
     root='data',
     split='train',
     download=True,
-    transform=transform
+    transform=config.TRANSFORM
 )
 test_set = LFWPeople(
     root='data',
     split='test',
     download=True,
-    transform=transform
+    transform=config.TRANSFORM
 )
 
 train_loader = DataLoader(train_set, batch_size=64, shuffle=True)
@@ -48,7 +43,7 @@ model = model_class(x.shape[-1]).to(device)
 # Optimizer
 optimizer = torch.optim.Adam(
     model.parameters(),
-    lr=1E-3
+    lr=config.LEARNING_RATE
 )
 
 # Loss Function
@@ -76,7 +71,7 @@ def save_metrics():
 
 
 # Train
-for epoch in tqdm(range(50), desc='Epoch'):
+for epoch in tqdm(range(config.EPOCHS), desc='Epoch'):
     model.train()
     train_loss = 0
     for data, _ in tqdm(train_loader, desc='Train', leave=False):

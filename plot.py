@@ -1,9 +1,9 @@
 import os
 import math
 import torch
+import config
 import numpy as np
 import seaborn as sns
-import torchvision.transforms as T
 import torchvision.transforms.functional as F
 from models import SimpleAutoencoder, ConvolutionalAutoencoder
 from torchvision.datasets.lfw import LFWPeople
@@ -59,11 +59,7 @@ def show_test_images(sae_path, cae_path, batch_size=16):
         root='data',
         split='test',
         download=True,
-        transform=T.Compose([
-            T.ToTensor(),
-            T.Resize((64, 64)),
-            T.Grayscale(),
-        ])
+        transform=config.TRANSFORM
     )
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=True)
 
@@ -106,8 +102,8 @@ def show_test_images(sae_path, cae_path, batch_size=16):
             del data
 
 
-SAE_PATH = 'models/SimpleAutoencoder/04_01_2023/10_46_23'
-CAE_PATH = 'models/ConvolutionalAutoencoder/04_01_2023/10_54_59'
+SAE_PATH = 'models/SimpleAutoencoder/04_01_2023/12_15_20'
+CAE_PATH = 'models/ConvolutionalAutoencoder/04_01_2023/12_32_46'
 
 plot_losses(SAE_PATH, CAE_PATH)
 show_test_images(SAE_PATH, CAE_PATH)
