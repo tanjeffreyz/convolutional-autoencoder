@@ -98,6 +98,7 @@ def show_test_images(sae_path, cae_path, batch_size=16):
             axs[0, 2].title.set_text('ConvolutionalAutoencoder')
 
             plt.subplots_adjust(wspace=0.025)
+            plt.tight_layout()
             plt.show()
             del data
 
