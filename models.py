@@ -17,9 +17,18 @@ class SimpleAutoencoder(nn.Module):
         size = in_size * in_size
         self.model = nn.Sequential(
             nn.Flatten(),
+
+            # Encoder
             nn.Linear(size, size // 2),
+            nn.ReLU(inplace=True),
+
+            # Latent Space (32 x 64)
+            nn.Linear(size // 2, size // 2),
+            nn.ReLU(inplace=True),
+
+            # Decoder
             nn.Linear(size // 2, size),
-            nn.Sigmoid()
+            nn.Sigmoid()        # Sigmoid b/c grayscale pixel values are in range [0,1]
         )
 
     def forward(self, x):
@@ -31,21 +40,31 @@ class ConvolutionalAutoencoder(nn.Module):
     def __init__(self, _):      # in_size doesn't matter for CAE
         super().__init__()
         self.model = nn.Sequential(
-            # Encoding
-            nn.Conv2d(1, 4, kernel_size=3, padding=1),
+            # Encoder
+            nn.Conv2d(1, 8, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
-            nn.Conv2d(4, 16, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+
+            nn.Conv2d(8, 16, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
+            nn.ReLU(inplace=True),
+
             nn.Conv2d(16, 32, kernel_size=3, padding=1),
             nn.MaxPool2d(kernel_size=2),
+            nn.ReLU(inplace=True),
 
-            # Latent Space
-            nn.ConvTranspose2d(32, 32, kernel_size=5, stride=1, padding=2),
+            # Latent Space (32 x 8 x 8)
+            nn.ConvTranspose2d(32, 32, kernel_size=5, stride=2, padding=1),
+            nn.ReLU(inplace=True),
 
-            # Decoding
-            nn.ConvTranspose2d(32, 16, kernel_size=4, stride=2, padding=1),
-            nn.ConvTranspose2d(16, 4, kernel_size=2, stride=2, padding=0),
-            nn.ConvTranspose2d(4, 1, kernel_size=4, stride=2, padding=1),
+            # Decoder
+            nn.ConvTranspose2d(32, 16, kernel_size=3, stride=2, padding=1),
+            nn.ReLU(inplace=True),
+
+            nn.ConvTranspose2d(16, 8, kernel_size=2, stride=2, padding=1),
+            nn.ReLU(inplace=True),
+
+            nn.ConvTranspose2d(8, 1, kernel_size=3, stride=1, padding=1),
             nn.Sigmoid()
         )
 

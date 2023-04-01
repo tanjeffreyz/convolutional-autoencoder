@@ -15,7 +15,7 @@ from matplotlib import pyplot as plt
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def plot_losses(path, color):
+def _plot_loss(path, color):
     model_class = path.split('/')[1]
     test_loss_path = os.path.join(path, 'test_losses.npy')
     train_loss_path = os.path.join(path, 'train_losses.npy')
@@ -23,8 +23,28 @@ def plot_losses(path, color):
     test_losses = np.load(test_loss_path)
     train_losses = np.load(train_loss_path)
 
-    sns.lineplot(x=train_losses[0, :], y=train_losses[1, :], color=color, alpha=0.25)
-    sns.lineplot(x=test_losses[0, :], y=test_losses[1, :], color=color, label=model_class)
+    sns.lineplot(
+        x=train_losses[0, :],
+        y=np.log(train_losses[1, :]),
+        color=color,
+        alpha=0.25
+    )
+    sns.lineplot(
+        x=test_losses[0, :],
+        y=np.log(test_losses[1, :]),
+        color=color,
+        label=model_class
+    )
+
+
+def plot_losses(sae_path, cae_path):
+    _plot_loss(sae_path, 'orange')
+    _plot_loss(cae_path, 'blue')
+
+    plt.xlabel('Epoch')
+    plt.ylabel('Log MSE')
+    plt.tight_layout()
+    plt.show()
 
 
 def _plot_grid(plot, batch):
@@ -86,11 +106,8 @@ def show_test_images(sae_path, cae_path, batch_size=16):
             del data
 
 
-SAE_PATH = 'models/SimpleAutoencoder/03_24_2023/18_06_04'
-CAE_PATH = 'models/ConvolutionalAutoencoder/03_24_2023/18_21_49'
+SAE_PATH = 'models/SimpleAutoencoder/04_01_2023/10_46_23'
+CAE_PATH = 'models/ConvolutionalAutoencoder/04_01_2023/10_54_59'
 
-# plot_losses(SAE_PATH, 'orange')
-# plot_losses(CAE_PATH, 'blue')
-# plt.show()
-
+plot_losses(SAE_PATH, CAE_PATH)
 show_test_images(SAE_PATH, CAE_PATH)

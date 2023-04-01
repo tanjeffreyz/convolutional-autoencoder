@@ -52,7 +52,7 @@ optimizer = torch.optim.Adam(
 )
 
 # Loss Function
-loss_function = torch.nn.BCELoss()
+loss_function = torch.nn.MSELoss()
 
 # Create folders for this run
 root = os.path.join(
