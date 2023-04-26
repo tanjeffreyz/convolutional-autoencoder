@@ -1,7 +1,7 @@
 <!--
 mlpi
 title: A Better Autoencoder for Image: Convolutional Autoencoder
-category: Architectures/Autoencoders
+category: architectures/autoencoders
 images: images/losses.png, images/reconstruction.png
 
 -->
